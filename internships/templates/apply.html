@@ -1,0 +1,46 @@
+<!-- internships/templates/apply.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header text-white text-center py-5" 
+                     style="background: linear-gradient(to right, #2a312cff, #4a9763ff, #2a312cff);">
+                    <i class="fas fa-file-upload fa-4x mb-4"></i>
+                    <h2 class="fw-bold mb-2">Apply for Internship</h2>
+                    <p class="lead mb-0">{{ internship.title }} at {{ internship.company }}</p>
+                </div>
+
+                <div class="card-body p-5">
+                    <div class="alert alert-info rounded-4 mb-5 text-center">
+                        <i class="fas fa-info-circle fa-2x mb-3 d-block"></i>
+                        <p class="mb-0">Upload your latest resume to complete the application</p>
+                    </div>
+
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label class="form-label fw-bold fs-5">Resume (PDF recommended)</label>
+                            <input type="file" name="resume" class="form-control form-control-lg" accept=".pdf,.doc,.docx" required>
+                            <small class="text-muted">Max size: 5MB</small>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg px-6 fw-bold shadow"
+                                    style="background: #0f794cff; border: none;">
+                                <i class="fas fa-paper-plane fa-lg me-3"></i>
+                                Submit Application
+                            </button>
+                            <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-lg ms-3">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+<!-- internships/templates/admin_dashboard.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="display-5 fw-bold text-center mb-5 text-primary">Admin Dashboard</h1>
+
+    <div class="row g-4 text-center mb-5">
+        <div class="col-md-4">
+            <div class="card shadow-sm p-4">
+                <i class="fas fa-users fa-4x text-primary mb-3"></i>
+                <h3>{{ users.count }}</h3>
+                <p>Total Users</p>
+                <a href="{% url 'admin_users' %}" class="btn btn-primary btn-sm mt-3">Manage Users</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm p-4">
+                <i class="fas fa-briefcase fa-4x text-success mb-3"></i>
+                <h3>{{ internships.count }}</h3>
+                <p>Internships</p>
+                <a href="{% url 'admin_internships' %}" class="btn btn-success btn-sm mt-3 me-2">View All</a>
+                <a href="{% url 'internship_add' %}" class="btn btn-success btn-sm mt-3">Add New</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm p-4">
+                <i class="fas fa-file-alt fa-4x text-warning mb-3"></i>
+                <h3>{{ applications.count }}</h3>
+                <p>Applications</p>
+                <a href="{% url 'admin_applications' %}" class="btn btn-warning btn-sm mt-3">View All</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <h3>Recent Internships</h3>
+            <ul class="list-group">
+                {% for internship in internships|slice:":5" %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ internship.title }} - {{ internship.company }}
+                        <div>
+                            <a href="{% url 'internship_edit' internship.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="{% url 'internship_delete' internship.pk %}" class="btn btn-danger btn-sm"
+                               onclick="return confirm('Delete this internship?')">Delete</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <h3>Recent Applications</h3>
+            <ul class="list-group">
+                {% for app in applications|slice:":5" %}
+                    <li class="list-group-item">
+                        {{ app.user.username }} applied for {{ app.internship.title }}
+                        <span class="badge bg-secondary ms-2">{{ app.status }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

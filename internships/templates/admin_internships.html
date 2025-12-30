@@ -1,0 +1,52 @@
+<!-- internships/templates/admin_internships.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h1 class="display-5 fw-bold">Manage Internships ({{ total_internships }})</h1>
+        <div>
+            <a href="{% url 'internship_add' %}" class="btn btn-success me-2">
+                <i class="fas fa-plus me-2"></i>Add Internship
+            </a>
+            <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Title</th>
+                    <th>Company</th>
+                    <th>Location</th>
+                    <th>Deadline</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for internship in internships %}
+                <tr>
+                    <td><strong>{{ internship.title }}</strong></td>
+                    <td>{{ internship.company }}</td>
+                    <td>{{ internship.location }}</td>
+                    <td>{{ internship.deadline|date:"M d, Y" }}</td>
+                    <td>
+                        <a href="{% url 'admin_internship_detail' internship.pk %}" class="btn btn-info btn-sm me-2">View Details</a>
+                        <a href="{% url 'internship_edit' internship.pk %}" class="btn btn-warning btn-sm me-2">Edit</a>
+                        <a href="{% url 'internship_delete' internship.pk %}" class="btn btn-danger btn-sm"
+                           onclick="return confirm('Delete this internship?')">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center py-5">No internships found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

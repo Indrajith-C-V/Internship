@@ -1,0 +1,63 @@
+<!-- internships/templates/admin_applications.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h1 class="display-5 fw-bold">Manage Applications ({{ total_applications }})</h1>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Applicant</th>
+                    <th>Internship</th>
+                    <th>Applied At</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for application in applications %}
+                <tr>
+                    <td>
+                        <strong>{{ application.user.username }}</strong><br>
+                        <small class="text-muted">{{ application.user.email }}</small>
+                    </td>
+                    <td>
+                        <strong>{{ application.internship.title }}</strong><br>
+                        <small class="text-muted">{{ application.internship.company }}</small>
+                    </td>
+                    <td>{{ application.applied_at|date:"M d, Y H:i" }}</td>
+                    <td>
+                        {% if application.status == 'Accepted' %}
+                            <span class="badge bg-success">Accepted</span>
+                        {% elif application.status == 'Rejected' %}
+                            <span class="badge bg-danger">Rejected</span>
+                        {% else %}
+                            <span class="badge bg-warning">Pending</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if application.status == 'Pending' %}
+                            <a href="{% url 'application_approve' application.pk %}" class="btn btn-success btn-sm me-2">Accept</a>
+                            <a href="{% url 'application_reject' application.pk %}" class="btn btn-danger btn-sm me-2"
+                               onclick="return confirm('Reject this application?')">Reject</a>
+                        {% endif %}
+                        <a href="{% url 'admin_application_detail' application.pk %}" class="btn btn-info btn-sm">View Details</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center py-5">No applications found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

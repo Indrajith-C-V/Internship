@@ -1,0 +1,99 @@
+<!-- internships/templates/admin_application_detail.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h1 class="display-5 fw-bold">Application Details</h1>
+        <div>
+            <a href="{% url 'admin_applications' %}" class="btn btn-secondary me-2">
+                <i class="fas fa-arrow-left me-2"></i>Back to Applications
+            </a>
+            {% if application.status == 'Pending' %}
+                <a href="{% url 'application_approve' application.pk %}" class="btn btn-success me-2">Accept Application</a>
+                <a href="{% url 'application_reject' application.pk %}" class="btn btn-danger"
+                   onclick="return confirm('Reject this application?')">Reject Application</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Applicant Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Username:</strong> {{ application.user.username }}</p>
+                            <p><strong>Email:</strong> {{ application.user.email }}</p>
+                            <p><strong>Contact:</strong> {{ application.user.contact|default:"Not provided" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            {% if application.user.profile_image %}
+                                <img src="{{ application.user.profile_image.url }}" alt="Profile Image" class="img-fluid rounded-circle mb-3" width="100">
+                            {% else %}
+                                <i class="fas fa-user-circle fa-3x text-muted mb-3"></i>
+                            {% endif %}
+                            <p><strong>Joined:</strong> {{ application.user.date_joined|date:"M d, Y" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Internship Details</h5>
+                </div>
+                <div class="card-body">
+                    <h6>{{ application.internship.title }}</h6>
+                    <p><strong>Company:</strong> {{ application.internship.company }}</p>
+                    <p><strong>Location:</strong> {{ application.internship.location }}</p>
+                    <p><strong>Duration:</strong> {{ application.internship.duration }}</p>
+                    <p><strong>Stipend:</strong> {{ application.internship.stipend|default:"Not specified" }}</p>
+                    <p><strong>Deadline:</strong> {{ application.internship.deadline|date:"M d, Y" }}</p>
+                    <p><strong>Description:</strong></p>
+                    <p>{{ application.internship.description }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="mb-0">Application Status</h5>
+                </div>
+                <div class="card-body text-center">
+                    <h4>
+                        {% if application.status == 'Accepted' %}
+                            <span class="badge bg-success fs-6">Accepted</span>
+                        {% elif application.status == 'Rejected' %}
+                            <span class="badge bg-danger fs-6">Rejected</span>
+                        {% else %}
+                            <span class="badge bg-warning fs-6">Pending</span>
+                        {% endif %}
+                    </h4>
+                    <p><strong>Applied on:</strong> {{ application.applied_at|date:"M d, Y H:i" }}</p>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Resume</h5>
+                </div>
+                <div class="card-body text-center">
+                    {% if application.resume %}
+                        <p><strong>Resume uploaded</strong></p>
+                        <a href="{{ application.resume.url }}" target="_blank" class="btn btn-primary">
+                            <i class="fas fa-download me-2"></i>Download Resume
+                        </a>
+                    {% else %}
+                        <p class="text-muted">No resume uploaded</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
